@@ -3,40 +3,21 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-// in-memory "DB"
+const PORT = process.env.PORT || 3000;
+
+// in-memory DB
 let users = [
   { id: 1, name: "Sheeba" },
-  { id: 2, name: "Sharon" }
+  { id: 2, name: "Sharon" },
+  { id: 3, name: "Sheeba" } // duplicate on purpose
 ];
 
-// serve HTML
-app.get("/", (req, res) => {
-  res.sendFile(process.cwd() + "/index.html");
-});
-
-// GET users
+// GET → return SET of names
 app.get("/users", (req, res) => {
-  res.json(users);
+  const nameSet = new Set(users.map(u => u.name));
+  res.json([...nameSet]); // convert Set → Array
 });
 
-// POST users
-app.post("/users", (req, res) => {
-  const { name } = req.body;
-
-  if (!name) {
-    return res.status(400).json({ error: "Name required" });
-  }
-
-  const newUser = {
-    id: users.length + 1,
-    name
-  };
-
-  users.push(newUser);
-  res.status(201).json(newUser);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-app.listen(8080, () => {
-  console.log("Server running on http://localhost:8080");
-});
-    
