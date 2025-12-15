@@ -1,46 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Users Page</title>
+  <title>Users</title>
 </head>
 <body>
-  <h2>Users</h2>
+  <h2>All Users (Unique Names)</h2>
 
-  <button onclick="getUsers()">Get Users</button>
+  <button onclick="getUsers()">Get All Users</button>
   <ul id="userList"></ul>
-
-  <h3>Add User</h3>
-  <input type="text" id="name" placeholder="Enter name">
-  <button onclick="addUser()">Add</button>
 
   <script>
     async function getUsers() {
       const res = await fetch("/users");
-      const users = await res.json();
+      const names = await res.json();
 
       const list = document.getElementById("userList");
       list.innerHTML = "";
 
-      users.forEach(u => {
+      names.forEach(name => {
         const li = document.createElement("li");
-        li.textContent = u.name;
+        li.textContent = name;
         list.appendChild(li);
       });
-    }
-
-    async function addUser() {
-      const name = document.getElementById("name").value;
-
-      await fetch("/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name })
-      });
-
-      document.getElementById("name").value = "";
-      getUsers();
     }
   </script>
 </body>
