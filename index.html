@@ -4,23 +4,21 @@
   <title>Users</title>
 </head>
 <body>
-  <h2>All Users (Unique Names)</h2>
-
+  <h2>Get All Users</h2>
   <button onclick="getUsers()">Get All Users</button>
-  <ul id="userList"></ul>
+  <ul id="list"></ul>
 
   <script>
     async function getUsers() {
       const res = await fetch("/users");
       const names = await res.json();
 
-      const list = document.getElementById("userList");
-      list.innerHTML = "";
-
+      const ul = document.getElementById("list");
+      ul.innerHTML = "";
       names.forEach(name => {
         const li = document.createElement("li");
         li.textContent = name;
-        list.appendChild(li);
+        ul.appendChild(li);
       });
     }
   </script>
