@@ -1,21 +1,22 @@
 import express from "express";
+import path from "path";
 
 const app = express();
-app.use(express.json());
-
 const PORT = process.env.PORT || 3000;
 
-// in-memory DB
+// Serve static files (index.html)
+app.use(express.static(process.cwd()));
+
 let users = [
   { id: 1, name: "Sheeba" },
   { id: 2, name: "Sharon" },
-  { id: 3, name: "Sheeba" } // duplicate on purpose
+  { id: 3, name: "Sheeba" }
 ];
 
-// GET → return SET of names
+// API → returns SET of names
 app.get("/users", (req, res) => {
-  const nameSet = new Set(users.map(u => u.name));
-  res.json([...nameSet]); // convert Set → Array
+  const uniqueNames = [...new Set(users.map(u => u.name))];
+  res.json(uniqueNames);
 });
 
 app.listen(PORT, () => {
