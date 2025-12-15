@@ -5,29 +5,25 @@ import { fileURLToPath } from "url";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// serve static frontend
+// ES Module fix for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Serve index.html
 app.use(express.static(__dirname));
 
-let users = [
-  { id: 1, name: "Sheeba" },
-  { id: 2, name: "Sharon" },
-  { id: 3, name: "Sheeba" }
-];
-
-// GET /users → unique names
+// API endpoint
 app.get("/users", (req, res) => {
-  const uniqueNames = [...new Set(users.map(u => u.name))];
-  res.json(uniqueNames);
+  const users = ["Sheeba", "Sharon", "Sheeba"];
+  const unique = [...new Set(users)];
+  res.json(unique);
 });
 
-// fallback to index.html for root
+// Fallback to index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
